@@ -1,0 +1,71 @@
+﻿@model Rayhan_EmployManagment.Models.ViewModels.EmployeeViewModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+@using (Html.BeginForm("Create", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{@Html.AntiForgeryToken() @Html.ValidationSummary()
+
+<div>
+    <div>
+        @Html.LabelFor(e => e.EmployeeName) @Html.EditorFor(e => e.EmployeeName) @Html.ValidationMessageFor(e => e.EmployeeName)
+    </div>
+    <div>
+        @Html.LabelFor(e => e.JoinDate) @Html.EditorFor(e => e.JoinDate) @Html.ValidationMessageFor(e => e.JoinDate)
+    </div>
+    <div>
+        @Html.LabelFor(e => e.IsActive) @Html.EditorFor(e => e.IsActive) @Html.ValidationMessageFor(e => e.IsActive)
+    </div>
+    <div>
+        @Html.LabelFor(e => e.Email) @Html.EditorFor(e => e.Email) @Html.ValidationMessageFor(e => e.Email)
+    </div>
+    <div>
+        @Html.LabelFor(e => e.Salary) @Html.EditorFor(e => e.Salary) @Html.ValidationMessageFor(e => e.Salary)
+    </div>
+    <div>
+        <img src="~/Images/Noimage.jpg"  id="imgFile" width="70" height="70" />
+
+        <input type="file" id="upimg" class="upimg" name="PicturePath" onchange="readUrl(this)" />
+        <label for="upimg">Upload</label>
+    </div>
+</div>
+<div><h2>Select Qualification</h2></div>
+<div><a href="#" id="btnPlus">Add</a></div>
+<div id="qualiContain">
+    @Html.Action("AddNewQualification", "Employee")
+</div>
+<div>
+    <input type="submit" value="Create" />
+</div>
+}
+<script src="~/Scripts/jquery-3.7.1.js"></script>
+<script>
+    function readUrl(input) {
+        if (input.files && input.files[0]) {
+            var rdr = new FileReader();
+            rdr.onload = function (e) {
+                $('#imgFile').attr('src', e.target.result);
+            };
+            rdr.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#btnPlus").click(function (e) {
+        e.preventDefault();
+        var contain = $('#qualiContain')
+        $.ajax({
+            url: "/Employee/AddNewQualification",
+            type: "GET",
+            success: function (d) {
+                contain.append(d)
+            }
+
+        });
+    })
+    $(document).on('click', '#btnDeleteQualification', function (e) {
+        e.preventDefault();
+        $(this).parent().parent().remove()
+    })
+</script>

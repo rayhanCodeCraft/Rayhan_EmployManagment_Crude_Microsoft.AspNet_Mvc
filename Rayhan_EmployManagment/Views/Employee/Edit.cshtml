@@ -1,0 +1,82 @@
+﻿
+@model Rayhan_EmployManagment.Models.ViewModels.EmployeeViewModel
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Employee Edit</h2>
+
+@using (Html.BeginForm("Edit", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{@Html.AntiForgeryToken() @Html.ValidationSummary()
+@Html.HiddenFor(e => e.EmployeeId) @Html.HiddenFor(e => e.Picture)
+<div>
+    <div>
+        <div>
+            @Html.LabelFor(e => e.EmployeeName) @Html.EditorFor(e => e.EmployeeName) @Html.ValidationMessageFor(e => e.EmployeeName)
+        </div>
+        <div>
+            @Html.LabelFor(e => e.IsActive) @Html.EditorFor(e => e.IsActive) @Html.ValidationMessageFor(e => e.IsActive)
+        </div>
+        <div>
+            @Html.LabelFor(e => e.JoinDate) @Html.EditorFor(e => e.JoinDate) @Html.ValidationMessageFor(e => e.JoinDate)
+        </div>
+        <div>
+            @Html.LabelFor(e => e.Email) @Html.EditorFor(e => e.Email) @Html.ValidationMessageFor(e => e.Email)
+        </div>
+        <div>
+            @Html.LabelFor(e => e.Salary) @Html.EditorFor(e => e.Salary) @Html.ValidationMessageFor(e => e.Salary)
+        </div>
+        <div>
+            <img src="@Model.Picture" id="imgFile" width="70" height="70" />
+        </div>
+
+        <div>
+            <input type="file" id="upimage" class="upimage" name="PicturePath" onchange="readUrl(this)" />
+            <label for="upimage">Upload Image</label>
+        </div>
+    </div>
+    <div>
+        <h2>Update Qualification</h2>
+        <a href="#" id="btnPlus">Add</a>
+    </div>
+    <div id="qualiContain">
+        @foreach (var item in Model.QualificationList)
+        {@Html.Action("AddNewQualification", "Employee", new { id = item })
+    }
+    </div>
+</div>
+<div>
+    <input type="submit" value="Update" />
+</div>
+}
+<script src="~/Scripts/jquery-3.7.1.js"></script>
+<script>
+    function readUrl(input) {
+        if (input.files && input.files[0]) {
+            var rdr = new FileReader();
+            rdr.onload = function (e) {
+                $('#imgFile').attr('src', e.target.result);
+            };
+            rdr.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#btnPlus").click(function (e) {
+        e.preventDefault();
+        var contain = $('#qualiContain')
+        $.ajax({
+            url: "/Employee/AddNewQualification",
+            type: "GET",
+            success: function (d) {
+                contain.append(d)
+            }
+
+        });
+    })
+    $(document).on('click', '#btnDeleteQualification', function (e) {
+        e.preventDefault();
+        $(this).parent().parent().remove()
+    })
+</script>
+

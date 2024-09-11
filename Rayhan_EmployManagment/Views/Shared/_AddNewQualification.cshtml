@@ -1,0 +1,9 @@
+﻿@model Rayhan_EmployManagment.Models.Qualification
+<div>
+    <div>
+        @Html.DropDownListFor(d => d.QualificationId, ViewBag.qualifications as SelectList, "--Select---")
+    </div>
+    <div>
+        <a href="#" id="btnDeleteQualification">Delete</a>
+    </div>
+</div>
